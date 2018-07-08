@@ -16,7 +16,7 @@ trait BotTrait
     public function commandStart($keywords)
     {
 
-        if (!auth()->user()->id) {
+        if (!auth()->check()) {
             return $this->isLogin();
         }
 
