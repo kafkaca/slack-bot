@@ -1,49 +1,95 @@
 <?php
 
-namespace App\Http\Controllers\API; 
+namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller; 
-use Carbon\Carbon; 
-use App\Rule; 
+use App\Http\Controllers\Controller;
+use App\Rule;
+use Carbon\Carbon;
 
-class EmployeeController extends Controller {
-    public function carbon() {
-        $rule = Rule::where('rule_name', 'vacation_rules')->first(); 
-        $current = Carbon::now(); 
+class EmployeeController extends Controller
+{
+    public function carbon()
+    {
+        $now = Carbon::now();
+        //echo $now->addDays(29);
+        $columns = \DB::connection()->getSchemaBuilder()->getColumnListing('departments');
+        //return $columns;
+        return \App\Employee::find(1)->first()
+            ->append([
+                'calisilan_gun',
+                'kac_gun_kaldi',
+                'kullanilan_izin',
+                'vacations',
+                'department',
+            ]);
 
-        $giris_date = "2018-01-01 23:59:00"; 
-        $istek_tarihi = "2018-08-21 23:59:00"; 
-        $giris_tarihi = Carbon::createFromFormat('Y-m-d H:i:s', $giris_date); 
+        /*
+        ::whereHas('comments', function ($query) {
+        $query->where('content', 'like', 'foo%');
+        })->get();
+         */
+        //\App\Department::find(2)->employees()->has('vacations')->get();
+        //\App\Employee::find(1)->department()->first()->employees()->select('id')->get()->pluck('id');
+        //->department();
+        //->first()->employess()->get();
 
-        $izin_baslangic = Carbon::createFromFormat('Y-m-d H:i:s', $istek_tarihi); 
+        //auth()->user()->roles()->sync((array) [2], true);
+
+        $rule = Rule::where('rule_name', 'vacation_rules')->first();
+        $current = Carbon::now();
+
+        $giris_date = "2018-01-01 23:59:00";
+        $istek_tarihi = "2018-08-21 23:59:00";
+        $giris_tarihi = Carbon::createFromFormat('Y-m-d H:i:s', $giris_date);
+
+        $izin_baslangic = Carbon::createFromFormat('Y-m-d H:i:s', $istek_tarihi);
         if ($current->diffInDays($izin_baslangic) < $rule->rule_data['min_out_date']) {
-            return "kapali"; 
+            return "kapali";
         }
 
-        return $current->diffInDays($izin_baslangic); 
+        return $current->diffInDays($izin_baslangic);
 
     }
 
-    public function getWorkInterval(\DateTime $dateTime = null) {
-        $startDate = $thi ->getDateStart(); 
-        if ( ! $startDate) {
-            return null; 
-        }
-        // reset start date to first day of next month
-        if ((int)$startDate->format('d') != 1) {
-            $month = $startDate->format('m'); 
-            $month += 1; 
-            $startDate ->setDate($startDate->format('Y'), $month, 1); 
-            $startDate->setTime(0, 0, 0); 
+    public function izinler()
+    {
+        $rule = Rule::where('rule_name', 'vacation_rules')->first();
+        $current = Carbon::now();
+
+        $giris_date = "2018-01-01 23:59:00";
+        $istek_tarihi = "2018-08-21 23:59:00";
+        $giris_tarihi = Carbon::createFromFormat('Y-m-d H:i:s', $giris_date);
+
+        $izin_baslangic = Carbon::createFromFormat('Y-m-d H:i:s', $istek_tarihi);
+        if ($current->diffInDays($izin_baslangic) < $rule->rule_data['min_out_date']) {
+            return "kapali";
         }
 
-        $currentDate = $dateTime?clone ($dateTime):new \DateTime(); 
-        $currentDate->modify('+1 day'); 
-        $currentDate->setTime(0, 0, 0); 
-        if ($startDate > $currentDate) {
-            return null; 
+        return $current->diffInDays($izin_baslangic);
+
+    }
+
+    public function getWorkInterval(\DateTime $dateTime = null)
+    {
+        $startDate = $thi->getDateStart();
+        if (!$startDate) {
+            return null;
         }
-        return $currentDate->diff($startDate); 
+        // reset start date to first day of next month
+        if ((int) $startDate->format('d') != 1) {
+            $month = $startDate->format('m');
+            $month += 1;
+            $startDate->setDate($startDate->format('Y'), $month, 1);
+            $startDate->setTime(0, 0, 0);
+        }
+
+        $currentDate = $dateTime ? clone ($dateTime) : new \DateTime();
+        $currentDate->modify('+1 day');
+        $currentDate->setTime(0, 0, 0);
+        if ($startDate > $currentDate) {
+            return null;
+        }
+        return $currentDate->diff($startDate);
     }
 
     /**
@@ -51,7 +97,8 @@ class EmployeeController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         //
     }
 
@@ -60,7 +107,8 @@ class EmployeeController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -70,7 +118,8 @@ class EmployeeController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         //
     }
 
@@ -80,7 +129,8 @@ class EmployeeController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         //
     }
 
@@ -90,7 +140,8 @@ class EmployeeController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         //
     }
 
@@ -101,7 +152,8 @@ class EmployeeController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         //
     }
 
@@ -111,11 +163,11 @@ class EmployeeController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         //
     }
 }
-
 
 //SOURCES
 

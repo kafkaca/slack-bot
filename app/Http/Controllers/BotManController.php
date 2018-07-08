@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use BotMan\BotMan\BotMan;
-
-use Illuminate\Http\Request;
 use App\Conversations\ExampleConversation;
+use App\Traits\BotTrait;
+use BotMan\BotMan\BotMan;
+use Illuminate\Http\Request;
 
 class BotManController extends Controller
 {
+    use BotTrait;
     /**
      * Place your BotMan logic here.
      */
@@ -16,14 +17,46 @@ class BotManController extends Controller
     {
         //$response = $bot->sendRequest('users.list');
 
-        
-       file_put_contents('handle.json', json_encode(request()->all()));
-	   
+        file_put_contents('handle.json', json_encode(request()->all()));
+
         $botman = app('botman');
 
+        $botman->group(['web' => WebDriver::class], function ($bot) {
+            $this->driver = 'web';
+
+            $bot->hears('call me {name}', function ($bot, $name) {
+                $bot->reply('Your name is: ' . $name);
+            });
+
+            $bot->hears('/bakbi {var}', function ($bot, $var) {
+
+                $keywords = explode(' ', $var);
+                $message = $this->commandStart($keywords);
+                $bot->typesAndWaits(1);
+                $bot->reply((string) $message['text']);
+                $bot->reply((string) $message['text']);
+                $bot->reply((string) $message['text']);
+
+            });
+
+        });
+        $botman->group(['slack' => SlackDriver::class], function ($bot) {
+            $this->driver = 'slack';
+            $bot->hears('/bakbi {var}', function ($bot, $var) {
+
+                $keywords = explode(' ', $var);
+                $message = $this->commandStart($keywords);
+                $bot->typesAndWaits(1);
+                $bot->reply((string) $message['text']);
+                $bot->reply((string) $message['text']);
+                $bot->reply((string) $message['text']);
+
+            });
+
+        });
+
         $botman->listen();
-		
-		
+
     }
 
     /**
@@ -31,7 +64,7 @@ class BotManController extends Controller
      */
     public function tinker()
     {
-        return view('tinker', ['user_id' => 22]);
+        return view('tinker', ['user_id' => auth()->user()->id ?? 0]);
     }
 
     /**
@@ -48,7 +81,6 @@ class BotManController extends Controller
      */
     public function startConversation(BotMan $bot)
     {
-
 
         $bot->startConversation(new ExampleConversation());
     }

@@ -1,0 +1,10 @@
+[
+    {
+        "name" : "Sick",
+        "description" : "Hastalıklar"
+    },
+    {
+        "name" : "overtime",
+        "description" : "Fazla Mesai"
+    }
+]

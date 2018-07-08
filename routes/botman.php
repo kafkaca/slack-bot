@@ -1,16 +1,21 @@
 <?php
 use App\Http\Controllers\BotManController;
 
+
 $botman = resolve('botman');
 
-$botman->hears('/bakbi {var}', function ($bot, $var) {
-		$exp = explode(':', $var);
-   $bot->reply('birdefa giris yapin '.$exp[0]);
+
+$botman->hears('/bakbi33 {var}', function ($bot, $var) {
+    
+
+    $exp = explode(':', $var);
+
+
+    $bot->reply('sizi tanımlayamadım, lütfen giriş yapın ' . $botTrait->selam());
 });
 
-
 $botman->hears('hin5', function ($bot) {
-  $json_to = '[
+    $json_to = '[
         {
             "text": "Choose a game to play",
             "fallback": "You are unable to choose a game",
@@ -49,19 +54,21 @@ $botman->hears('hin5', function ($bot) {
     $bot->reply('Hello!', ['attachments' => json_decode($json_to)]);
 });
 
-$botman->hears('con01', BotManController::class.'@startConversation');
-
-
-
+$botman->hears('con01', BotManController::class . '@startConversation');
 
 $botman->hears('demora3', function ($bot) {
 
-
-  $bot->reply('log alindi');
+    $bot->reply('log alindi');
 
 });
 
 $botman->hears('Hi', function ($bot) {
+   /* $user = $bot->getUser()->getId();
+    if (auth()->check()) {
+
+        file_put_contents('user.json', auth()->user()->email);
+    }
+*/
     $bot->reply('Hello!');
 });
-$botman->hears('/bakbi {var}', BotManController::class . '@startConversation');
+$botman->hears('/bakbi22 {var}', BotManController::class . '@startConversation');

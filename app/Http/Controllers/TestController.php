@@ -17,6 +17,12 @@ class TestController extends Controller
         return view('welcome');
     }
 
+    public function getTableColumns($table_name)
+    {
+    $columns =  \DB::connection()->getSchemaBuilder()->getColumnListing($table_name);
+    return $columns;
+    }
+
     /**
      * Slack IncomeApi Test."
      *

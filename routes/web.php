@@ -1,11 +1,8 @@
 <?php
 
-Route::get('/', "TestController@index");
-Route::get('/json_to', "TestController@json_sender");
-Route::get('/income-api', "TestController@incomeApi");
-Route::get('/slack-test', "TestController@slack_curl");
-
-
+Route::get('/', function (Request $request) {
+    return view('welcome');
+});
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
