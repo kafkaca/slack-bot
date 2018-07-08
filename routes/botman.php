@@ -3,8 +3,8 @@ use App\Http\Controllers\BotManController;
 
 
 $botman = resolve('botman');
-$bot->hears('/izinslack {var}', BotManController::class . '@izinSlack');
-$bot->hears('/izinweb {var}', BotManController::class . '@izinweb');
+$botman->hears('/izinslack {var}', BotManController::class . '@izinSlack');
+$botman->hears('/izinweb {var}', BotManController::class . '@izinweb');
 
 
 
