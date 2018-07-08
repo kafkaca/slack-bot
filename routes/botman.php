@@ -3,72 +3,14 @@ use App\Http\Controllers\BotManController;
 
 
 $botman = resolve('botman');
+$bot->hears('/izinslack {var}', BotManController::class . '@izinSlack');
+$bot->hears('/izinweb {var}', BotManController::class . '@izinweb');
 
 
-$botman->hears('/bakbi33 {var}', function ($bot, $var) {
-    
-
-    $exp = explode(':', $var);
 
 
-    $bot->reply('sizi tanımlayamadım, lütfen giriş yapın ' . $botTrait->selam());
-});
+     $botman->hears('call me {name}', function ($bot, $name) {
+                $bot->reply('Your name is: ' . $name);
+            });
 
-$botman->hears('hin5', function ($bot) {
-    $json_to = '[
-        {
-            "text": "Choose a game to play",
-            "fallback": "You are unable to choose a game",
-            "callback_id": "wopr_game",
-            "color": "#3AA3E3",
-            "attachment_type": "default",
-            "actions": [
-                {
-                    "name": "game",
-                    "text": "Chess",
-                    "type": "button",
-                    "value": "chess"
-                },
-                {
-                    "name": "game",
-                    "text": "Falkens Maze",
-                    "type": "button",
-                    "value": "maze"
-                },
-                {
-                    "name": "game",
-                    "text": "Thermonuclear War",
-                    "style": "danger",
-                    "type": "button",
-                    "value": "war",
-                    "confirm": {
-                        "title": "Are you sure?",
-                        "text": "Wouldnt you prefer a good game of chess?",
-                        "ok_text": "Yes",
-                        "dismiss_text": "No"
-                    }
-                }
-            ]
-        }
-    ]';
-    $bot->reply('Hello!', ['attachments' => json_decode($json_to)]);
-});
-
-$botman->hears('con01', BotManController::class . '@startConversation');
-
-$botman->hears('demora3', function ($bot) {
-
-    $bot->reply('log alindi');
-
-});
-
-$botman->hears('Hi', function ($bot) {
-   /* $user = $bot->getUser()->getId();
-    if (auth()->check()) {
-
-        file_put_contents('user.json', auth()->user()->email);
-    }
-*/
-    $bot->reply('Hello!');
-});
 $botman->hears('/bakbi22 {var}', BotManController::class . '@startConversation');

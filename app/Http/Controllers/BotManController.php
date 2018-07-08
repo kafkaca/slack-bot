@@ -20,45 +20,35 @@ class BotManController extends Controller
         file_put_contents('handle.json', json_encode(request()->all()));
 
         $botman = app('botman');
-
-        $botman->group(['web' => WebDriver::class], function ($bot) {
-            $this->driver = 'web';
-
-            $bot->hears('call me {name}', function ($bot, $name) {
-                $bot->reply('Your name is: ' . $name);
-            });
-
-            $bot->hears('/bakbi {var}', function ($bot, $var) {
-
-                $keywords = explode(' ', $var);
-                $message = $this->commandStart($keywords);
-                $bot->typesAndWaits(1);
-                $bot->reply((string) $message['text']);
-                $bot->reply((string) $message['text']);
-                $bot->reply((string) $message['text']);
-
-            });
-
-        });
-        $botman->group(['slack' => SlackDriver::class], function ($bot) {
-            $this->driver = 'slack';
-            $bot->hears('/bakbi {var}', function ($bot, $var) {
-
-                $keywords = explode(' ', $var);
-                $message = $this->commandStart($keywords);
-                $bot->typesAndWaits(1);
-                $bot->reply((string) $message['text']);
-                $bot->reply((string) $message['text']);
-                $bot->reply((string) $message['text']);
-
-            });
-
-        });
-
         $botman->listen();
 
     }
 
+    public function izinSlack($bot, $var)
+    {
+
+        $this->driver = 'slack';
+
+        $keywords = explode(' ', $var);
+        $message = $this->commandStart($keywords);
+        $bot->reply((string) $message['text']);
+        $bot->reply((string) $message['text']);
+        $bot->reply((string) $message['text']);
+
+    }
+    
+    public function bakbiWeb($bot, $var)
+    {
+
+        $this->driver = 'slack';
+
+        $keywords = explode(' ', $var);
+        $message = $this->commandStart($keywords);
+        $bot->reply((string) $message['text']);
+        $bot->reply((string) $message['text']);
+        $bot->reply((string) $message['text']);
+
+    }
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
