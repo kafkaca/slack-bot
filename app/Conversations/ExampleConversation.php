@@ -21,7 +21,6 @@ $json_to = '[
         {
             "text": "Choose a game to play",
             "fallback": "You are unable to choose a game",
-            "callback_id": "wopr_game",
             "color": "#3AA3E3",
             "attachment_type": "default",
             "actions": [
@@ -55,20 +54,19 @@ $json_to = '[
     ]';
 
 
- return $this->ask('Shall we proceed? Say YES or NO', [
-        [
-            'pattern' => 'yes|yep',
-            'callback' => function () use ($json_to) {
-                return $this->say('Okay - we\'ll keep going', ['attachments' => json_decode($json_to)]);
-            }
-        ],
-        [
-            'pattern' => 'nah|no|nope',
-            'callback' => function () {
-                return $this->say('PANIC!! Stop the engines NOW!');
-            }
-        ]
-    ]);
+$question = Question::create('Who wins the lifetime supply of chocolate?')
+    ->callbackId('select_users')
+    ->addAction(
+        Menu::create('Who should win?')
+            ->name('winners_list')
+            ->chooseFromUsers()
+    );
+
+$this->ask($question, function (Answer $answer) {
+    $selectedOptions = $answer->getValue();
+    
+});
+
 
 /*
 
