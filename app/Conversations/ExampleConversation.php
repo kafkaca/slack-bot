@@ -17,7 +17,7 @@ class ExampleConversation extends Conversation
     public function askReason()
     {
 
-  /*$json_to = '[
+$json_to = '[
         {
             "text": "Choose a game to play",
             "fallback": "You are unable to choose a game",
@@ -54,12 +54,11 @@ class ExampleConversation extends Conversation
         }
     ]';
 
-*/
-/*
+
  return $this->ask('Shall we proceed? Say YES or NO', [
         [
             'pattern' => 'yes|yep',
-            'callback' => function () {
+            'callback' => function () use ($json_to) {
                 return $this->say('Okay - we\'ll keep going', ['attachments' => json_decode($json_to)]);
             }
         ],
@@ -70,8 +69,8 @@ class ExampleConversation extends Conversation
             }
         ]
     ]);
-*/
 
+/*
 
 $question = Question::create("Huh - you woke me up. What do you need?")
     ->fallback('Unable to ask question')
@@ -86,7 +85,7 @@ return $this->ask($question, function (Answer $answer) {
 $this->bot->reply('PANIC!! Stop the engines NOW!');
 });
 
-
+*/
 
     }
 
