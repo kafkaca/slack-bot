@@ -31,16 +31,16 @@ class BotManController extends Controller
 
         $keywords = explode(' ', $var);
         $message = $this->commandStart($keywords);
-        $bot->reply((string) $message['text']);
-        $bot->reply((string) $message['text']);
-        $bot->reply((string) $message['text']);
+        $bot->reply((string) $message['text'], ['attachments' => ["text"=> "Choose a game to play"]]);
+        $bot->startConversation(new ExampleConversation());
+
 
     }
     
-    public function bakbiWeb($bot, $var)
+    public function izinWeb($bot, $var)
     {
 
-        $this->driver = 'slack';
+        $this->driver = 'web';
 
         $keywords = explode(' ', $var);
         $message = $this->commandStart($keywords);

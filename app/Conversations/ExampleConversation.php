@@ -72,16 +72,16 @@ class ExampleConversation extends Conversation
     ]);
 */
 
-/*
+
 $question = Question::create("Huh - you woke me up. What do you need?")
     ->fallback('Unable to ask question')
     ->callbackId('ask_reason')
     ->addButtons([
-        Button::create('Tell a joke')->value('joke'),
-        Button::create('Give me a fancy quote')->value('quote'),
+        Button::create('sec01')->value('sec01'),
+        Button::create('sec02')->value('sec02'),
     ]);
-	*/
-return $this->ask("Huh - you woke me up. What do you need?", function (Answer $answer) {
+
+return $this->ask($question, function (Answer $answer) {
 
 $this->bot->reply('PANIC!! Stop the engines NOW!');
 });
