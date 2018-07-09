@@ -54,18 +54,10 @@ $json_to = '[
     ]';
 
 
-$question = Question::create('Who wins the lifetime supply of chocolate?')
-    ->callbackId('select_users')
-    ->addAction(
-        Menu::create('Who should win?')
-            ->name('winners_list')
-            ->chooseFromUsers()
-    );
-
-$this->ask($question, function (Answer $answer) {
-    $selectedOptions = $answer->getValue();
-    
+$this->ask('How are you?', function (Answer $response) {
+    $this->say('Cool - you said ' . $response->getText());
 });
+
 
 
 /*
