@@ -54,10 +54,17 @@ $json_to = '[
     ]';
 
 
-$this->ask('How are you?', function (Answer $response) {
-    $this->say('Cool - you said ' . $response->getText(),  [
-                        "attachments" => $json_to
-                    ]);
+// Inside your conversation
+$question = Question::create('It\'s time to nominate the channel of the week')
+    ->callbackId('select_channel')
+    ->addAction(
+        Menu::create('Which channel changed your life this week?')
+            ->name('channels_list')
+            ->chooseFromChannels()
+    );
+
+$this->ask($question, function (Answer $answer) {
+    $selectedOptions = $answer->getValue();
 });
 
 
