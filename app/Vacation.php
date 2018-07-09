@@ -8,7 +8,7 @@ class Vacation extends Model
 {
     protected $table = 'vacations';
     protected $primaryKey = 'id';
-    public $timestamps = false;
+    public $timestamps = true;
     protected $hidden = [];
     public $attributes = [];
     protected $fillable = [
@@ -19,26 +19,22 @@ class Vacation extends Model
     "employee_note",
     "result_note",
     "status",
-    "request_at"
+    "request_at",
+    "updated_by"
 ];
     protected $guarded = [];
     protected $casts = [
         //'x_column' => 'array',
     ];
 
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
     public function employee()
     {
         return $this->belongsTo("App\Employee", 'employee_id', 'id');
     }
-
-
+    
 }
-
-//SOURCES
-
-/*
-
-https: //carbon.nesbot.com/docs/
-
-
-*/

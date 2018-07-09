@@ -13,6 +13,7 @@ class Role extends Model
         'permissions' => 'array',
     ];
 
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'role_users');
@@ -34,14 +35,3 @@ class Role extends Model
         return $this->permissions[$permission] ?? false;
     }
 }
-
-//SOURCES
-
-/*
-https: //laravel-news.com/authorization-gates
-https: //thewebtier.com/laravel/understanding-roles-permissions-laravel/
-https: //www.5balloons.info/user-role-based-authentication-and-access-control-in-laravel/
-
-
-*/
-

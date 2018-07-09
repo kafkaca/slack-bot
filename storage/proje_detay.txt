@@ -1,39 +1,40 @@
-Projeye gelince;
-Bir chatbot istiyoruz, Slack'den çalışabilir. PHP'nin botnet'i var, onu kullandık ve memnun kaldık.
-Bu chatbot'un amacı şirketteki izinleri takip etmek, yeni izin almak ya da iptal etmek. Yöneticilerin onay vermesi ya da red etmesi.
+ï»¿Projeye gelince;
+Bir chatbot istiyoruz, Slack'den Ã§alÄ±ÅŸabilir. PHP'nin botnet'i var, onu kullandÄ±k ve memnun kaldÄ±k.
+Bu chatbot'un amacÄ± ÅŸirketteki izinleri takip etmek, yeni izin almak ya da iptal etmek. YÃ¶neticilerin onay vermesi ya da red etmesi.
 
-İzin alma süreci:
-Kullanıcı izin almak istediğini bildirir, ++
-Sistem ona tarihleri sorar, izin başlangıç günü 30'günden ötede ise ve aynı departmanda o tarihlerde izine çıkan birisi yoksa, ilgili tarihi bloke eder. 
-!! Method hazırla check yapıp set et. !!
-Aksi durumda yönetici onayına gönderir.
-
-
-İzin görüntüleme:
-Kişi kaç gün izni kaldığını sorar (tip: çalışanların izin süreleri farklıdır), ++
-Sistem ona bu sene n sayıda gün kullandığını, n günü kaldığını söyler. ++
-İsterse hangi tarihlerde çıktığını listeler. ++
-
-İzin iptal:
-Kişi yaklaşan iznini iptal etmek istediğini belirtir, ++
-Eğer 30 günden fazla varsa direkt iptal edilir,
-Aksi durumda yönetici onayına gider.
-
-Yönetici işlemleri:
-İzin alma onaylama
-İzin iptal onaylama
-Kişiye göre izin durumu görüntüleme.
+Ä°zin alma sÃ¼reci:
+KullanÄ±cÄ± izin almak istediÄŸini bildirir, ++
+Sistem ona tarihleri sorar, izin baÅŸlangÄ±Ã§ gÃ¼nÃ¼ 30'gÃ¼nden Ã¶tede ise ve aynÄ± departmanda o tarihlerde izine Ã§Ä±kan birisi yoksa, ilgili tarihi bloke eder. 
+!! Method hazÄ±rla check yapÄ±p set et. !!
+Aksi durumda yÃ¶netici onayÄ±na gÃ¶nderir.
 
 
-Birkaç konu:
-NLP konusuna girmene gerek yok, seçenekleri direkt buton olarak sunabilirsin.
-Slack zor gelirse, botnet'in web driver'ı var, o da olabilir, kendi widget'ı falan var çok hoş.
-Chatbot istememin nedeni, seni sadece logic ile uğraştırmak, önyüz çok zaman alacaktır, gerek yok.
-Senden full DB istiyorum, bu analize göre DB tasarımı gerekli.
-Bahsedilmeyen yerlere girmene gerek yok, sonuçta bu çok geniş bir konu.
-Yazdığın kodu kullanmayacağız, kimseyle paylaşmayacağız, kod senindir.
-Eğer Docker ile çalıştırırsan kalbimizi kazanırsın :)
-Projede risk almak yerine net olmayan yerleri bana sormanı öneririm, sormak erdemdir.
-Bir değerlendir, yapacaksan ne kadar zamanda yapabileceğini söyle, istediğin kadar zaman alabilirsin.
+Ä°zin gÃ¶rÃ¼ntÃ¼leme:
+KiÅŸi kaÃ§ gÃ¼n izni kaldÄ±ÄŸÄ±nÄ± sorar (tip: Ã§alÄ±ÅŸanlarÄ±n izin sÃ¼releri farklÄ±dÄ±r), ++
+Sistem ona bu sene n sayÄ±da gÃ¼n kullandÄ±ÄŸÄ±nÄ±, n gÃ¼nÃ¼ kaldÄ±ÄŸÄ±nÄ± sÃ¶yler. ++
+Ä°sterse hangi tarihlerde Ã§Ä±ktÄ±ÄŸÄ±nÄ± listeler. ++
 
-Eğer demo projesi sonucu olumlu olursa direkt teklif yapacağım.
+Ä°zin iptal:
+KiÅŸi yaklaÅŸan iznini iptal etmek istediÄŸini belirtir, ++
+EÄŸer 30 gÃ¼nden fazla varsa direkt iptal edilir,
+!! Method hazÄ±rla first izin iÃ§in kontrol et duruma gÃ¶rede set et. !!
+Aksi durumda yÃ¶netici onayÄ±na gider.
+
+YÃ¶netici iÅŸlemleri:
+Ä°zin alma onaylama
+Ä°zin iptal onaylama
+KiÅŸiye gÃ¶re izin durumu gÃ¶rÃ¼ntÃ¼leme.
+
+
+BirkaÃ§ konu:
+NLP konusuna girmene gerek yok, seÃ§enekleri direkt buton olarak sunabilirsin.
+Slack zor gelirse, botnet'in web driver'Ä± var, o da olabilir, kendi widget'Ä± falan var Ã§ok hoÅŸ.
+Chatbot istememin nedeni, seni sadece logic ile uÄŸraÅŸtÄ±rmak, Ã¶nyÃ¼z Ã§ok zaman alacaktÄ±r, gerek yok.
+Senden full DB istiyorum, bu analize gÃ¶re DB tasarÄ±mÄ± gerekli.
+Bahsedilmeyen yerlere girmene gerek yok, sonuÃ§ta bu Ã§ok geniÅŸ bir konu.
+YazdÄ±ÄŸÄ±n kodu kullanmayacaÄŸÄ±z, kimseyle paylaÅŸmayacaÄŸÄ±z, kod senindir.
+EÄŸer Docker ile Ã§alÄ±ÅŸtÄ±rÄ±rsan kalbimizi kazanÄ±rsÄ±n :)
+Projede risk almak yerine net olmayan yerleri bana sormanÄ± Ã¶neririm, sormak erdemdir.
+Bir deÄŸerlendir, yapacaksan ne kadar zamanda yapabileceÄŸini sÃ¶yle, istediÄŸin kadar zaman alabilirsin.
+
+EÄŸer demo projesi sonucu olumlu olursa direkt teklif yapacaÄŸÄ±m.

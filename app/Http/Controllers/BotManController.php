@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Conversations\ExampleConversation;
 use App\Traits\BotTrait;
 use BotMan\BotMan\BotMan;
-use Illuminate\Http\Request;
 
 class BotManController extends Controller
 {
@@ -17,9 +16,12 @@ class BotManController extends Controller
     {
         //$response = $bot->sendRequest('users.list');
 
-        file_put_contents('handle.json', json_encode(request()->all()));
+        // file_put_contents('handle.json', json_encode(request()->all()));
 
         $botman = app('botman');
+        $botman->fallback(function ($bot) {
+            $bot->reply("Anlaşılmadı 'fallback'.");
+        });
         $botman->listen();
 
     }
@@ -28,25 +30,23 @@ class BotManController extends Controller
     {
 
         $this->driver = 'slack';
+        $this->bot = $bot;
 
         $keywords = explode(' ', $var);
-        //$message = $this->commandStart($keywords);
-        //$bot->reply((string) $message['text'], ['attachments' => ["text"=> "Choose a game to play"]]);
-        $bot->startConversation(new ExampleConversation());
-
+        $message = $this->commandStart($keywords);
 
     }
-    
+
     public function izinWeb($bot, $var)
     {
 
         $this->driver = 'web';
+        $this->bot = $bot;
 
         $keywords = explode(' ', $var);
+        $keywords = implode(':', $keywords);
+        
         $message = $this->commandStart($keywords);
-        $bot->reply((string) $message['text']);
-        $bot->reply((string) $message['text']);
-        $bot->reply((string) $message['text']);
 
     }
     /**
@@ -54,7 +54,7 @@ class BotManController extends Controller
      */
     public function tinker()
     {
-        return view('tinker', ['user_id' => auth()->user()->id ?? 0]);
+        return view('tinker', ['user_id' => auth()->check() ? auth()->user()->id : 0]);
     }
 
     /**

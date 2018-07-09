@@ -12,27 +12,11 @@ class Employee extends Model
     public $timestamps = true;
     protected $hidden = [];
     public $appends = [
-        'employee_type'
-        /*'kullanilan_izin',
-        'kac_gun_kaldi',
-        'calisilan_gun',
-        'izin_durumu',
-        'department',
-        'vacations',*/
-        /*
-    \App\Employee::find(1)->first()
-    ->append([
-    'calisilan_gun',
-    'kac_gun_kaldi',
-    'kullanilan_izin',
-    'vacations',
-    'department',
-    ]);
-     */
+        'employee_type',
+        'vacations',
     ];
-    public $attributes = ['calisilan_gun' => 0];
+    public $attributes = [];
     protected $fillable = [
-        "user_id",
         "can_login",
         "first_name",
         "last_name",
@@ -55,10 +39,21 @@ class Employee extends Model
     {
         return $this->hasMany("App\Vacation", 'employee_id', 'id');
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
     public function department()
     {
-        // \App\Employee::find(1)->department()->first()->CheckDateArea('2018-09-01 23:59:00', '2018-11-29 23:59:00')->get();
 
+        /* Sample query
+        \App\Employee::find(1)
+        ->department()->first()
+        ->CheckIsBlockDateWait('2018-09-01')
+        ->get();
+         */
         return $this->belongsTo("App\Department", 'department_id', 'id');
     }
 
@@ -69,37 +64,61 @@ class Employee extends Model
 
     //ATTRIBUTES START
 
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function getDepartmentAttribute()
     {
         return $this->department()->first();
     }
-
+    /**
+     * Undocumented function
+     *
+     * @return object
+     */
     public function getEmployeeTypeAttribute()
     {
         return $this->department()->first();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
     public function getVacationsAttribute()
     {
         return $this->vacations()->get();
     }
 
-    //Kullanılan İzin sayısı.
+    /**
+     * Kullanılan İzin Toplamı.
+     *
+     * @return integer
+     */
     public function getKullanilanIzinAttribute()
     {
 
-        $collection = $this->vacations()->select('vacation_start as start', 'vacation_end as end')->where('status', 1)->get();
+        $collection = $this->vacations()
+            ->select('vacation_start as start', 'vacation_end as end')
+            ->where('status', 'success')->get();
 
         return $collection->reduce(function ($start_count = 0, $item) {
-            $start_parse = Carbon::parse($item->start)->format('Y-m-d H:i:s');
-            $end_parse = Carbon::parse($item->end)->format('Y-m-d H:i:s');
-            $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $start_parse);
-            $end_date = Carbon::createFromFormat('Y-m-d H:i:s', $end_parse);
+            $start_parse = Carbon::parse($item->start)->format('Y-m-d');
+            $end_parse = Carbon::parse($item->end)->format('Y-m-d');
+            $start_date = Carbon::createFromFormat('Y-m-d', $start_parse);
+            $end_date = Carbon::createFromFormat('Y-m-d', $end_parse);
             return $start_count += $start_date->diffInDays($end_date);
         });
     }
 
-    //Kaç gün izin kaldı.
+    /**
+     * Kaç gün izin kaldı.
+     *
+     * @return array
+     */
     public function getKacGunKaldiAttribute()
     {
         $rule = $this->employee_type()->first();
@@ -111,15 +130,19 @@ class Employee extends Model
         ];
     }
 
-    //Çalışılan gün.
+    /**
+     * Çalışılan gün.
+     *
+     * @return integer
+     */
     public function getCalisilanGunAttribute()
     {
         $now = Carbon::now();
-        $start_parse = Carbon::parse($this->startw_date)->format('Y-m-d H:i:s');
-        $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $start_parse);
+        $start_parse = Carbon::parse($this->startw_date)->format('Y-m-d');
+        $start_date = Carbon::createFromFormat('Y-m-d', $start_parse);
         //$now->addDays(1);
 
-        return $now->diffInDays($start_date);
+        return $now->diffInDays($start_date) - $this->kullanilan_izin;
     }
 
 }

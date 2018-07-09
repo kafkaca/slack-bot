@@ -7,7 +7,7 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 
-class ExampleConversation extends Conversation
+class IzınKullanConversation extends Conversation
 {
 
     /**
@@ -45,7 +45,7 @@ class ExampleConversation extends Conversation
                 if ($is_cancelable && !$hasEmloyee) {
                     $new_vacation->status = 'success';
                     $new_vacation->save();
-                    $this->say('Kabul edildi');
+                    $this->say('kabul edildi');
                 } else {
                     $this->say('Yönetici Onayı Bekliyor.');
                 }
@@ -81,6 +81,7 @@ class ExampleConversation extends Conversation
             ],
         ]);
     }
+    
     /**
      * Undocumented function
      *
@@ -121,8 +122,3 @@ class ExampleConversation extends Conversation
         $this->tarihAraligi();
     }
 }
-
-/*
-https://stackoverflow.com/questions/50616925/unable-to-respond-to-more-than-one-click-on-an-interactive-message
-https://github.com/mpociot/laravel-slack-inviter/blob/master/app/Services/Slack.php
- */

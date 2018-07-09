@@ -35,6 +35,7 @@
 <div class="container">
     <div class="content" id="app">
         <botman-tinker api-endpoint="/botman" user-id="{!! $user_id !!}"></botman-tinker>
+       <!-- <iframe src="/botman/chat" frameborder="0"></iframe> -->
     </div>
 </div>
 

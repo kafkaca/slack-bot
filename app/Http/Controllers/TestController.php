@@ -3,9 +3,55 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class TestController extends Controller
 {
+
+     public function carbon()
+    {
+        $now = Carbon::now();
+        //echo $now->addDays(29);
+        $columns = \DB::connection()->getSchemaBuilder()->getColumnListing('departments');
+        //return $columns;
+        
+        return auth()->user()->employee()->first()->append([
+            'calisilan_gun',
+            'kac_gun_kaldi',
+            'kullanilan_izin',
+            'vacations',
+            'department',
+        ])->vacations()->get();
+        
+        //\App\Department::find(1)
+        //->CheckIsBlockDateCount('2018-05-01', '2018-11-29')->get();
+        //\App\Employee::find(1)->vacations()->create(request()->all());
+       // return \App\Employee::create(request()->all());
+        /*\App\Employee::find(1)->first()
+            ->append([
+                'calisilan_gun',
+                'kac_gun_kaldi',
+                'kullanilan_izin',
+                'vacations',
+                'department',
+            ]);
+*/
+        /*
+        ::whereHas('comments', function ($query) {
+        $query->where('content', 'like', 'foo%');
+        })->get();
+         */
+        //\App\Department::find(2)->employees()->has('vacations')->get();
+        //\App\Employee::find(1)->department()->first()->employees()->select('id')->get()->pluck('id');
+        //->department();
+        //->first()->employess()->get();
+
+        //auth()->user()->roles()->sync((array) [2], true);
+
+        return $current->diffInDays($izin_baslangic);
+
+    }
+
 
     /**
      * Display a listing of the resource.
@@ -17,6 +63,12 @@ class TestController extends Controller
         return view('welcome');
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $table_name
+     * @return void
+     */
     public function getTableColumns($table_name)
     {
     $columns =  \DB::connection()->getSchemaBuilder()->getColumnListing($table_name);
@@ -180,8 +232,22 @@ class TestController extends Controller
     }
 }
 
-/*
 
+ //SOURCES
+
+/*
+https: //carbon.nesbot.com/docs/
+https: //laracasts.com/discuss/channels/eloquent/laravel-timstamp-get-from-carbonparse
+https: //laravel-news.com/authorization-gates
+https: //thewebtier.com/laravel/understanding-roles-permissions-laravel/
+https: //www.5balloons.info/user-role-based-authentication-and-access-control-in-laravel/
+ */
+
+
+
+// MORE
+
+/*
 $this->ask('Hello! What is your firstname?', function(Answer $answer) {
 // Save result
 $this->firstname = $answer->getText();
@@ -209,3 +275,4 @@ $this->say('Value or key '.$selectedText);
 });
 
  */
+
