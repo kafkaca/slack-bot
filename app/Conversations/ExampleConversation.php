@@ -55,7 +55,14 @@ $json_to = '[
 
 
 $this->ask('How are you?', function (Answer $response) {
-    $this->say('Cool - you said ' . $response->getText());
+    $this->say('Cool - you said ' . $response->getText(),  [
+                        "attachments" => json_encode([
+                            [
+                                "color" => "good",
+                                "text" => "No active timers found..."
+                            ]
+                        ])
+                    ]);
 });
 
 

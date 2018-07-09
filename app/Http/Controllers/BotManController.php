@@ -30,8 +30,8 @@ class BotManController extends Controller
         $this->driver = 'slack';
 
         $keywords = explode(' ', $var);
-        $message = $this->commandStart($keywords);
-        $bot->reply((string) $message['text'], ['attachments' => ["text"=> "Choose a game to play"]]);
+        //$message = $this->commandStart($keywords);
+        //$bot->reply((string) $message['text'], ['attachments' => ["text"=> "Choose a game to play"]]);
         $bot->startConversation(new ExampleConversation());
 
 
