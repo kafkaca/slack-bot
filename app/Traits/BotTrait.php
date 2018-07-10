@@ -10,7 +10,7 @@ trait BotTrait
     private $driver;
     private $message = [];
     private $bot;
-
+    private $user_id = 0;
     public function __construct()
     {
         $this->message['text'] = 'tanımsız';
@@ -24,11 +24,50 @@ trait BotTrait
      */
     public function commandStart($keywords)
     {
+
+        $keywords = implode(':', $keywords);
+        if (strpos($keywords, '@')) {
+            $this->user_id = explode(':@', $keywords)[1];
+            $keywords = stristr($keywords, ':@', true);
+        }
+
         if (!auth()->check()) {
             return $this->isLogin();
         }
+        if ($this->user_id && !auth()->user()->hasAccess(['employee_edit'])) {
+            $this->message['text'] = 'yetkileriniz sınırlı ';
+            $this->reply();
+            return false;
+        } elseif ($this->user_id && !\App\User::find($this->user_id)) {
+            $this->message['text'] = 'çalışan bulunamadı';
+            $this->reply();
+            return false;
+
+        }
 
         return $this->commandOne($keywords);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function izinHelp()
+    {
+        $this->bot->reply('Genel Çalışan Komutları');
+        $this->bot->reply('/izinweb|izinslack platforma göre.');
+        $this->bot->reply('/izinweb izin kullan');
+        $this->bot->reply('/izinweb izin listele');
+        $this->bot->reply('/izinweb izin goster kalan');
+        $this->bot->reply('/izinweb izin iptal');
+        $this->bot->reply('...');
+        $this->bot->reply('Yonetici Komutları');
+        $this->bot->reply('/izinweb izin onay @user_id');
+        $this->bot->reply('/izinweb izin iptal @user_id');
+        $this->bot->reply('/izinweb izin listele eployees');
+        $this->bot->reply('/izinweb izin listele @user_id');
+
     }
 
     /**
@@ -39,6 +78,7 @@ trait BotTrait
      */
     public function commandOne($keyword)
     {
+
         switch ($keyword) {
             case 'izin:help':
                 return $this->izinHelp();
@@ -46,8 +86,16 @@ trait BotTrait
                 break;
             case 'izin:kullan':
                 $this->izinKullan();
-
                 break;
+
+            case 'izin:onay':
+                $this->izinOnay();
+                break;
+
+            case 'izin:listele:eployees':
+                $this->allPendingVacations();
+                break;
+
             case 'izin:iptal':
                 $this->izinIptal();
                 break;
@@ -75,7 +123,7 @@ trait BotTrait
 
         $first_vacation = $this->user_data()->vacations()
             ->whereIn('status', ['pending', 'success'])->get()->last();
-        if ($first_vacation) {
+        if ($first_vacation && !$this->user_id) {
             $is_cancelable = $this->user_data()
                 ->department()
                 ->first()
@@ -84,15 +132,40 @@ trait BotTrait
                 in_array($first_vacation->status, ['pending', 'success'])
                 || $is_cancelable) {
                 $first_vacation->status = 'cancel';
-                $first_vacation->updated_by = $this->user_data()->id;
+                $first_vacation->updated_by = auth()->user()->id;
                 $first_vacation->save();
-                $this->message['text'] = 'iptal edildi';
+                $this->message['text'] = 'İptal edildi';
 
             } else {
                 $this->message['text'] = 'Yönetici İptal Onayı Bekliyor';
             }
+        } elseif ($this->user_id && $first_vacation) {
+            $first_vacation->status = 'cancel';
+            $first_vacation->updated_by = auth()->user()->id;
+            $first_vacation->save();
+            $this->message['text'] = 'iptal edildi';
+        } else {
+            $this->message['text'] = $this->user_data()->display_name . ' için bekleyen istek yok.';
+
         }
 
+        $this->reply();
+    }
+
+    public function izinOnay()
+    {
+
+        $first_vacation = $this->user_data()->vacations()
+            ->whereIn('status', ['pending'])->get()->last();
+        if ($first_vacation) {
+            $first_vacation->status = 'success';
+            $first_vacation->updated_by = auth()->user()->id;
+            $first_vacation->save();
+            $this->message['text'] = 'İzin Onaylandı.';
+        } else {
+            $this->message['text'] = 'Bekleyen izin isteği yok.';
+
+        }
         $this->reply();
     }
 
@@ -104,7 +177,7 @@ trait BotTrait
     public function izinKalan()
     {
         $this->message['text'] = $this->user_data()->kac_gun_kaldi['kullanilan'] . ' kullandiniz | '
-        . $this->user_data()->kac_gun_kaldi['kalan'] . ' kaldi';
+        . $this->user_data()->kac_gun_kaldi['kalan'] . ' kaldi ';
         $this->reply();
 
     }
@@ -114,16 +187,25 @@ trait BotTrait
      *
      * @return void
      */
-    public function izinHelp()
+
+    public function allPendingVacations()
     {
-        $this->bot->reply('/izinweb|izinslack olarak platforma göre path komutu verilebilir.');
-        $this->bot->reply('/izinweb izin kullan');
-        $this->bot->reply('/izinweb izin listele');
-        $this->bot->reply('/izinweb izin goster kalan');
-        $this->bot->reply('/izinweb izin iptal');
-        $this->bot->reply('...');
-        $this->bot->reply('Yonetici Komutları');
-        $this->bot->reply('/izinweb izin iptal');
+        $this->message['text'] = 'desc: user_id|start_date|status';
+        $this->reply();
+
+        foreach (\App\Vacation::whereIn('status', ['success', 'pending'])->distinct()
+            ->orderBy('id', 'desc')
+            ->get() as $key => $vacation) {
+            $this->message['text'] =
+            $vacation->employee_id . '|'
+            . $vacation->vacation_start
+            //. ' tarihi notu: '
+            //. $vacation->employee_note
+             . '|' . $vacation->status;
+            $this->reply();
+        }
+
+        // $this->reply();
 
     }
 
@@ -190,13 +272,23 @@ trait BotTrait
      */
     public function user_data()
     {
-        return auth()->user()->employee()->first()->append([
-            'calisilan_gun',
-            'kac_gun_kaldi',
-            'kullanilan_izin',
-            'vacations',
-            'department',
-        ]);
+        $user = 0;
+        if (!$this->user_id) {
+            $user = auth()->user();
+        } else {
+            $user = \App\User::find($this->user_id);
+        }
+
+        if ($user) {
+            return $user->employee()->first()->append([
+                'calisilan_gun',
+                'kac_gun_kaldi',
+                'kullanilan_izin',
+                'vacations',
+                'department',
+            ]);
+        }
+        die();
     }
 
     /**

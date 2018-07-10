@@ -44,7 +44,7 @@ class BotManController extends Controller
         $this->bot = $bot;
 
         $keywords = explode(' ', $var);
-        $keywords = implode(':', $keywords);
+        
         
         $message = $this->commandStart($keywords);
 

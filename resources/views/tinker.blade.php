@@ -29,6 +29,14 @@
         .content {
             text-align: center;
         }
+        .ChatLog {
+            max-width: 100em !important;
+            margin: 0 auto;
+        }
+        ul.ChatLog {
+            max-height: 600px !important;
+            overflow-y: scroll !important;
+        }   
     </style>
 </head>
 <body>

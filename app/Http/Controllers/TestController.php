@@ -241,7 +241,8 @@ https: //laracasts.com/discuss/channels/eloquent/laravel-timstamp-get-from-carbo
 https: //laravel-news.com/authorization-gates
 https: //thewebtier.com/laravel/understanding-roles-permissions-laravel/
 https: //www.5balloons.info/user-role-based-authentication-and-access-control-in-laravel/
- */
+https: //scotch.io/tutorials/easier-datetime-in-laravel-and-php-with-carbon
+https: //github.com/indexlabstz/eshangazi/*/
 
 
 
@@ -273,6 +274,30 @@ $selectedText = $answer->getText(); // will be either 'Of course' or 'Hell no!'
 $this->say('Value or key '.$selectedText);
 }
 });
+
+return \App\Department::find(1)->employees()->whereHas('vacations', function ($query) {
+    $query->where('vacation_start', '>=', '2018-01-01 23:59:00')
+        ->where('vacation_end', '<=', '2018-08-01 23:59:00');
+})->with('vacations')->get();
+
+$now = Carbon::now();
+$start_date = Carbon::createFromFormat('Y-m-d H:i:s', $start_date);
+
+if ($now->diffInDays($start_date) <= $now->addDays($this->dt_wait)) {
+    return $this->employees()
+        ->whereHas('vacations', function ($query) use ($start_date, $end_date, $now) {
+
+            $rule = Rule::where('rule_name', 'vacation_rules')->first();
+
+            Carbon::createFromFormat('Y-m-d H:i:s', $start_date);
+            Carbon::createFromFormat('Y-m-d H:i:s', $end_date);
+
+            $query->select('id')->where('vacation_start', '>=', $start_date)
+                ->where('vacation_end', '<=', $end_date)
+                ->where('vacation_start', '>', $now->addDays($this->dt_wait))
+                ->distinct();
+        })->get();
+}
 
  */
 
