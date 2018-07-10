@@ -24,8 +24,8 @@ You can access your application via **`localhost`**, if you're running the conta
 
 Service|Address outside containers
 ------|---------|-----------
-Webserver|[localhost:3000](http://localhost:3000)
-MariaDB|**host:** `localhost`; **port:** `3003`
+Webserver|[localhost:8080](http://localhost:8080)
+MySQL|**host:** `localhost`; **port:** `8082`
 
 ## Hosts within your environment ##
 
@@ -34,7 +34,7 @@ You'll need to configure your application to use any services you enabled:
 Service|Hostname|Port number
 ------|---------|-----------
 php-fpm|php-fpm|9000
-MariaDB|mariadb|3306 (default)
+MySQL|mysql|3306 (default)
 
 # Docker compose cheatsheet #
 
